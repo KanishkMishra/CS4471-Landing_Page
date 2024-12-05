@@ -29,44 +29,38 @@ async function fetchServices() {
 }
 
 // Load services when the page loads
-//document.addEventListener('DOMContentLoaded', fetchServices);
+document.addEventListener('DOMContentLoaded', fetchServices);
 
-let activeUrls = []; // List to store URLs to be pinged
-
-function pingUrls() {
-    setInterval(() => {
-        activeUrls.forEach((url, index) => {
-            fetch(URL, { mode: "no-cors" })
-                .then(response => {
-                    if (response.ok) {
-                        console.log(`Successfully pinged: ${url}`);
-                        // If a URL was previously removed after failure, re-add it here (optional)
-                    } else {
-                        console.log(`Error pinging ${url}: ${response.status}`);
-                        // Remove failed URL
-                        activeUrls.splice(index, 1); 
-                    }
-                })
-                .catch(error => {
-                    console.log(`Error pinging ${url}: ${error}`);
-                    // Remove failed URL if network error occurs
-                    activeUrls.splice(index, 1);
+async function checkServiceStatus(urls) {
+    const results = await Promise.all(
+        urls.map(async (url) => {
+            try {
+                const response = await fetch(url, {
+                    method: "GET",
+                    mode: "no-cors", // Adjust this based on your setup
                 });
-        });
-    }, 5000);  // Ping every 5 seconds
+                return { url, status: response.status, ok: response.ok };
+            } catch (error) {
+                return { url, status: "unreachable", ok: false, error: error.message };
+            }
+        })
+    );
+
+    return results;
 }
 
-// Add a URL to the list of URLs to be pinged
-function addUrlToPingList(url) {
-    if (!activeUrls.includes(url)) {
-        activeUrls.push(url);
-        console.log(`Added ${url} to the ping list.`);
-    } else {
-        console.log(`${url} is already in the ping list.`);
-    }
-}
+// List of Cloud Run service URLs
+const cloudRunUrls = [
+    "https://graph-639312966170.us-central1.run.app",
+    "https://news-639312966170.us-central1.run.app",
+    "https://cryptocurrencies-front-639312966170.us-central1.run.app"
+];
+
+checkServiceStatus(cloudRunUrls).then((results) => {
+    console.log("Service statuses:", results);
+});
 
 // Example: Add links to ping
-addUrlToPingList("https://graph-639312966170.us-central1.run.app");
-addUrlToPingList("https://news-639312966170.us-central1.run.app");
-pingUrls();
+//addUrlToPingList("https://graph-639312966170.us-central1.run.app");
+//addUrlToPingList("https://news-639312966170.us-central1.run.app");
+//pingUrls();
