@@ -69,3 +69,4 @@ function addUrlToPingList(url) {
 // Example: Add links to ping
 addUrlToPingList("https://graph-639312966170.us-central1.run.app/");
 addUrlToPingList("https://news-639312966170.us-central1.run.app/");
+pingUrls();
