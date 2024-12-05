@@ -23,7 +23,6 @@ async function fetchServices() {
             servicesList.appendChild(listItem);
         });
     } catch (error) {
-        console.error('Error loading services:', error);
         alert('Failed to load services. Please try again later.');
     }
 }
