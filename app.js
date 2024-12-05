@@ -29,7 +29,7 @@ async function fetchServices() {
 }
 
 // Load services when the page loads
-document.addEventListener('DOMContentLoaded', fetchServices);
+//document.addEventListener('DOMContentLoaded', fetchServices);
 
 let activeUrls = []; // List to store URLs to be pinged
 
