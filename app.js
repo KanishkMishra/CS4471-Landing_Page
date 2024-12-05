@@ -36,7 +36,7 @@ let activeUrls = []; // List to store URLs to be pinged
 function pingUrls() {
     setInterval(() => {
         activeUrls.forEach((url, index) => {
-            fetch(url)
+            fetch(URL, { mode: "no-cors" })
                 .then(response => {
                     if (response.ok) {
                         console.log(`Successfully pinged: ${url}`);
