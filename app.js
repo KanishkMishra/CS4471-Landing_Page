@@ -14,7 +14,7 @@ async function checkServiceStatusAndUpdateUI(urls) {
         const results = await Promise.all(
             urls.map(async (url) => {
                 try {
-                    const response = await fetch(url, { method: "GET" });
+                    const response = await fetch(url, { method: "GET", mode: "no-cors" });
                     return { url, status: response.status, ok: response.ok };
                 } catch (error) {
                     return { url, status: "unreachable", ok: false, error: error.message };
